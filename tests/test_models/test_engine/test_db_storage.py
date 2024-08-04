@@ -73,7 +73,7 @@ class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
-        """Test that all returns a dictionaty"""
+        """Test that all returns a dictionary"""
         self.assertIs(type(models.storage.all()), dict)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
@@ -87,6 +87,43 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get(self):
+        """Test if get returns correct objects."""
+        # create item
+        cls = classes['BaseModel']
+        instance = cls()
+        instance.save()
+        id = instance.id
+        # get item
+        item = models.storage.get(cls, id)
+        # basic tests
+        self.assertIsInstance(item, cls, "get returns object type")
+        self.assertEqual(id, item.id, "get returns different object")
+        # remove item
+        models.storage.delete(item)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count(self):
+        """Test if count returns correct value."""
+        cls = classes['BaseModel']
+        # get item count
+        count_1 = models.storage.count()
+        # get cls item count
+        count_cls_1 = models.storage.count(cls)
+        # create item
+        instance = cls()
+        instance.save()
+        # get item count
+        count_2 = models.storage.count()
+        # get cls item count
+        count_cls_2 = models.storage.count(cls)
+        # basic tests
+        self.assertEqual(count_2, count_1 + 1)
+        self.assertEqual(count_cls_2, count_cls_1 + 1)
+        # remove item
+        models.storage.delete(instance)
 
 
 if __name__ == "__main__":
