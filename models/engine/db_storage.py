@@ -46,7 +46,9 @@ class DBStorage:
         new_dict = {}
         for clss in classes:
             if cls is None or cls is classes[clss] or cls is clss:
-                objs = self.__session.query(classes[clss]).all()
+                objs = self.__session.\
+                    query(cls if type(cls) is 'string' else classes[clss]).\
+                    all()
                 for obj in objs:
                     key = obj.__class__.__name__ + '.' + obj.id
                     new_dict[key] = obj
@@ -93,4 +95,6 @@ class DBStorage:
             count = len(self.all())
         elif cls in classes.values():
             count = len(self.all(cls))
+        elif cls in classes.keys():
+            count = len(self.all(classes[cls]))
         return count
