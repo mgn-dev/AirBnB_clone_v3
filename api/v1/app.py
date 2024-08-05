@@ -19,6 +19,7 @@ def teardown_db(exception):
     """Calls the close method from storage."""
     storage.close()
 
+
 # Create a handler for 404 errors
 @app.errorhandler(404)
 def not_found(error):
