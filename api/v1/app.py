@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Module that models blueprints."""
 
-from flask import Flask
+from flask import Flask, jsonify
 from models import storage
 from api.v1.views import app_views
 import os
@@ -18,6 +18,11 @@ app.register_blueprint(app_views)
 def teardown_db(exception):
     """Calls the close method from storage."""
     storage.close()
+
+# Create a handler for 404 errors
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({"error": "Not found"}), 404
 
 
 # Run the Flask server
