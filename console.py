@@ -160,6 +160,26 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
+    def do_test_get(self, args):
+        """Tests newly added get methods"""
+        if len(args) == 0:
+            print("** class name missing **")
+            print("** instance id missing **")
+        else:
+            args_list = args.split(" ")
+            if len(args_list) == 2:
+                obj = models.storage.get(classes[args_list[0]], args_list[1])
+                print(classes[args_list[0]].__name__)
+                print(obj.id)
+                print(f"get: {obj}")
+
+    def do_test_count(self, args):
+        """Tests newly added count methods"""
+        if len(args) == 0:
+            print(f"count: {models.storage.count()}")
+        else:
+            print(f"count: {models.storage.count(classes[args])}")
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
